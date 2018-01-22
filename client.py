@@ -51,6 +51,22 @@ def CountOfOpponent():
 	else:
 		print count
 
+def Validate_Input(x,y,al,cnt,board):
+	if (x<0 or x>9) or (y<0 or y>9):
+		return 0
+	if (al=='h' and (x+cnt)>10) or (al=='v' and (y+cnt)>10):
+		return 0
+	if al=='h':
+		for i in range(x,x+cnt):
+			if board[x][i]==1:
+				return 1
+		return 2
+	elif al=='v':
+		for i in range(y,y+cnt):
+			if board[i][y]==1:
+				return 1
+		return 2
+		
 ships = {"Aircraft Carrier":5,
 		     "Battleship":4,
  		     "Submarine":2,
@@ -63,9 +79,12 @@ cnt = 5
 board= []
 for i in range(10):
 	board_row = []
+	mark_row = []
 	for j in range(10):
 		board_row.append(0)
+		
 	board.append(board_row)
+	
 
 waiting= "Waiting for opponent"
 print waiting
@@ -75,7 +94,16 @@ ready= cli.recv(512)
 if ready=="ready":
 	for _ in range(5):
 		print "Enter starting coordinates and v or h"
-		x,y,al=raw_input().split(' ')
+		f=0
+		while (f!=1):
+			x,y,al=raw_input().split(' ')
+			var = Validate_Input(int(x),int(y),al,cnt,board)
+			if(var==0):
+				print "Enter Valid Input"
+			if(var==1):
+				print "Ship is already there enter another input"
+			else:
+				f=1
 		print x,y,al
 		board = print_board(board,int(x),int(y),al,cnt)
 		cnt-=1
