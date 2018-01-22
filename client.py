@@ -45,24 +45,27 @@ def sendCords():
 def CountOfOpponent():
 	count = cli.recv(512)
 	print count
+	'''
 	if count=="0":
 		print ("You Win the game")
 		exit()
 	else:
 		print count
-
+	'''
 def Validate_Input(x,y,al,cnt,board):
 	if (x<0 or x>9) or (y<0 or y>9):
 		return 0
-	if (al=='h' and (x+cnt)>10) or (al=='v' and (y+cnt)>10):
+	if al!='h' and al!='v':
+		al='h'
+	if (al=='h' and (y+cnt)>10) or (al=='v' and (x+cnt)>10):
 		return 0
 	if al=='h':
-		for i in range(x,x+cnt):
+		for i in range(y,y+cnt):
 			if board[x][i]==1:
 				return 1
 		return 2
 	elif al=='v':
-		for i in range(y,y+cnt):
+		for i in range(x,x+cnt):
 			if board[i][y]==1:
 				return 1
 		return 2
@@ -95,15 +98,20 @@ if ready=="ready":
 	for _ in range(5):
 		print "Enter starting coordinates and v or h"
 		f=0
+		al = 'h'
 		while (f!=1):
-			x,y,al=raw_input().split(' ')
+			x,y=raw_input().strip().split(' ')
+			print "Enter Alignment v or h"
+			al = raw_input()
 			var = Validate_Input(int(x),int(y),al,cnt,board)
 			if(var==0):
 				print "Enter Valid Input"
-			if(var==1):
+			elif(var==1):
 				print "Ship is already there enter another input"
 			else:
 				f=1
+		if al!='h' and al!='v':
+			al='h'
 		print x,y,al
 		board = print_board(board,int(x),int(y),al,cnt)
 		cnt-=1
